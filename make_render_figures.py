@@ -109,9 +109,10 @@ def tier_a(out):
     order = [k for k in ["sgd", "momentum", "rmsprop", "adam", "lbfgs", "lm_group", "hybrid"] if k in runs]
     init = imageio.imread(os.path.join(runs[order[0]][0], "init.png"))
     panels = [("Target (kodim23)", gt, None), (f"Random init · {psnr(init, gt):.1f} dB", init, None)]
+    short = {**LABEL, "lm_group": "LM", "hybrid": "Adam → LM (ours)"}
     for k in order:
         img = imageio.imread(os.path.join(runs[k][0], "final.png"))
-        panels.append((f"{LABEL[k]} · {psnr(img, gt):.1f} dB", img, k))
+        panels.append((f"{short[k]} · {psnr(img, gt):.2f} dB", img, k))
     ncol = 5
     nrow = int(np.ceil(len(panels) / ncol))
     fig, axes = plt.subplots(nrow, ncol, figsize=(COL_W * 1.25, 1.42 * nrow), layout="constrained", squeeze=False)
@@ -120,7 +121,15 @@ def tier_a(out):
     for ax, (t, img, k) in zip(axes.flat, panels):
         ax.imshow(img, interpolation="nearest")
         ax.set_title(t, fontweight="bold" if k == "hybrid" else "normal", fontsize=6.8)
-    fig.suptitle("Tier A · 2000 Gaussians, 600 s on an RTX 3090, seed 0", fontsize=7.5, x=0.01, ha="left")
+    if "adam" in runs and "hybrid" in runs and len(panels) < nrow * ncol:
+        a = imageio.imread(os.path.join(runs["adam"][0], "final.png")).astype(np.float32)
+        h = imageio.imread(os.path.join(runs["hybrid"][0], "final.png")).astype(np.float32)
+        d = np.abs(a - h).mean(-1)
+        ax = axes.flat[len(panels)]
+        ax.imshow(d, cmap="magma", vmin=0, vmax=max(8.0, float(np.percentile(d, 99.9))), interpolation="nearest")
+        ax.set_title("|Adam − ours|, 0–255", fontsize=6.8)
+    fig.suptitle("Tier A · 2000 Gaussians, 600 s on an RTX 3090, seed 0 · LM = per-attribute Jacobi",
+                 fontsize=7.5, x=0.01, ha="left")
     for ext in ("png", "pdf"):
         fig.savefig(os.path.join(out, f"ia_renders_2d.{ext}"))
     plt.close(fig)

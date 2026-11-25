@@ -68,6 +68,16 @@ This command rebuilds every plot and every table value from those logs:
 python make_figures.py --runs results --out results/figures     # CPU only; needs only numpy and matplotlib
 ```
 
+The Tier A image figure (`results/figures/ia_renders_2d.png`) can also be rebuilt from the shipped
+`results/tierA/renders/*/final.png`. It needs the Kodak image for the ground truth (`bash tools/download_data.sh kodak`)
+and PyTorch for the image loader. The Tier B image figure needs your own Tier B runs.
+
+```bash
+python make_render_figures.py --runs results --out results/figures
+```
+
+![Final image of each solver on the Tier A image fit after 600 s](results/figures/ia_renders_2d.png)
+
 ## Data
 
 The datasets are not redistributed here. Fetch each one from its original source, and use it under that
