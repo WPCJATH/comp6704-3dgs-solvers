@@ -857,6 +857,22 @@
    "t_at_switch": null,
    "lm_groups": "color"
   },
+  "bicycle_rmsprop_s0": {
+   "scene": "bicycle",
+   "method": "rmsprop",
+   "tag": "",
+   "psnr": 25.11,
+   "ssim": 0.7517,
+   "lpips": 0.2102,
+   "time_train": 1607.4,
+   "n_gaussians": 3260733,
+   "peak_mem_mb": 4785.0,
+   "lm_iters": null,
+   "lm_accepted": null,
+   "lm_time": null,
+   "t_at_switch": null,
+   "lm_groups": "all"
+  },
   "chair_adam_s0": {
    "scene": "chair",
    "method": "adam",
@@ -889,6 +905,22 @@
    "t_at_switch": null,
    "lm_groups": "color"
   },
+  "chair_rmsprop_s0": {
+   "scene": "chair",
+   "method": "rmsprop",
+   "tag": "",
+   "psnr": 37.13,
+   "ssim": 0.9908,
+   "lpips": 0.0055,
+   "time_train": 790.1,
+   "n_gaussians": 95727,
+   "peak_mem_mb": 3276.0,
+   "lm_iters": null,
+   "lm_accepted": null,
+   "lm_time": null,
+   "t_at_switch": null,
+   "lm_groups": "all"
+  },
   "ficus_adam_s0": {
    "scene": "ficus",
    "method": "adam",
@@ -920,6 +952,22 @@
    "lm_time": 130.48963133699726,
    "t_at_switch": null,
    "lm_groups": "color"
+  },
+  "ficus_rmsprop_s0": {
+   "scene": "ficus",
+   "method": "rmsprop",
+   "tag": "",
+   "psnr": 32.9,
+   "ssim": 0.9864,
+   "lpips": 0.009,
+   "time_train": 759.7,
+   "n_gaussians": 72304,
+   "peak_mem_mb": 3276.0,
+   "lm_iters": null,
+   "lm_accepted": null,
+   "lm_time": null,
+   "t_at_switch": null,
+   "lm_groups": "all"
   },
   "garden_adam_s0": {
    "scene": "garden",

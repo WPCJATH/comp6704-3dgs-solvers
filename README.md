@@ -37,8 +37,8 @@ finite-difference `Jv` does not match gsplat's backward pass for positions, scal
 | | Adam | Adam → LM (ours) | Others |
 |---|---|---|---|
 | Tier A, PSNR (dB) after 600 s, 3 seeds | 32.77 ± 0.14 | 32.72 ± 0.12 | RMSProp 31.57, Nesterov 30.54, SGD 29.08, L-BFGS 28.77, LM 26.86 |
-| lego / chair / ficus, test PSNR (dB) | 35.56 / 37.16 / 33.17 | 35.34 / 37.02 / 33.08 | RMSProp lego 35.25 |
-| garden / bicycle, test PSNR (dB) | 27.36 / 25.17 | 27.37 / 25.17 | RMSProp garden 27.20 |
+| lego / chair / ficus, test PSNR (dB) | 35.56 / 37.16 / 33.17 | 35.34 / 37.02 / 33.08 | RMSProp 35.25 / 37.13 / 32.90 |
+| garden / bicycle, test PSNR (dB) | 27.36 / 25.17 | 27.37 / 25.17 | RMSProp 27.20 / 25.11 |
 | peak GPU memory, real scenes | 9.5 GB | 53 GB | |
 
 Adam's second-moment estimate rank-correlates 0.85–0.92 with the Gauss–Newton diagonal `diag(JᵀJ)` near
