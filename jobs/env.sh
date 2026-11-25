@@ -18,6 +18,12 @@ if [ "${CONDA_DEFAULT_ENV:-}" != "${IA3DGS_ENV:-ia3dgs}" ]; then
     fi
   done
 fi
+# The pip wheels of torch bundle their own CUDA libraries. A system CUDA toolkit on LD_LIBRARY_PATH
+# (often added by login profiles) can shadow them and break `import torch` (e.g. an older libnvJitLink).
+if [ -n "${LD_LIBRARY_PATH:-}" ] && [ "${IA3DGS_KEEP_LD_PATH:-0}" != 1 ]; then
+  LD_LIBRARY_PATH="$(printf '%s' "$LD_LIBRARY_PATH" | tr ':' '\n' | grep -v '/cuda' | paste -sd: - || true)"
+  export LD_LIBRARY_PATH
+fi
 export PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 export TORCH_HOME="$(python -c 'from ia3dgs import paths; print(paths.cache())')/torch"
 exec "$@"

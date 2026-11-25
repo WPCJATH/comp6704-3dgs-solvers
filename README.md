@@ -113,7 +113,7 @@ excluded. `bash jobs/env.sh <cmd>` runs a command inside the `ia3dgs` environmen
 | 2 | Tier B stage 1: lego Adam baseline, FD adjoint check, two LM pilots with 4 views per step | `bash jobs/env.sh bash jobs/tierB_stage1.sh` | ~20 min |
 | 3 | Full-batch LM pilots (every attribute / colour / colour + opacity) | `bash jobs/env.sh bash jobs/tierB_pilots_fullbatch.sh` | ~20 min |
 | 4 | E6: per scene, the Adam baseline (checkpoint at step 20k), then the hybrid from it with Adam's 20k → 30k time | `bash jobs/env.sh bash jobs/tierB_hybrids.sh` | ~2.5 h (RTX A6000) |
-| 5 | E6: RMSProp on lego and garden | `bash jobs/env.sh bash jobs/tierB_baselines.sh` | ~25 min |
+| 5 | E6: RMSProp on every scene | `bash jobs/env.sh bash jobs/tierB_baselines.sh` | ~55 min |
 | 6 | Seed 0 of E1 again, saving the rendered images (for the qualitative figure) | `bash jobs/env.sh python tierA/grid.py --exp renders` | ~75 min |
 | 7 | All plots and `results.json` | `python make_figures.py` | CPU |
 | 8 | Rendered-image figures (needs the datasets for the ground truth) | `python make_render_figures.py` | CPU |
