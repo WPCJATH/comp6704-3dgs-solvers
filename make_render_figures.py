@@ -10,7 +10,8 @@ Tier A  (needs `python tierA/grid.py --exp renders`):
 Tier B  (uses the two test views every train3d.py run saves under runs/tierB/runs/<run>/renders):
     ia_renders_3d.png      per scene: ground truth, Adam, Adam -> LM (ours), RMSProp where it was run,
                            with a zoomed crop and the |Adam - hybrid| difference
-    ia_renders_3d_<scene>.png   one large panel per scene (for the web page)
+    ia_renders_3d_<scene>.png        one row per scene
+    ia_renders_3d_<scene>_page.png   two rows per scene (full frames, then enlarged crops), for a web page
 PSNR printed on each panel is computed on that image alone, so it differs from the test-set means.
 """
 import argparse
@@ -201,7 +202,35 @@ def tier_b(out):
         draw(axes, scene, idx, gt, imgs, big=True)
         fig.savefig(os.path.join(out, f"ia_renders_3d_{scene}.png"), dpi=200)
         plt.close(fig)
+        page_panel(out, scene, idx, gt, imgs, methods, names)
     print("wrote ia_renders_3d (+ per scene):", ", ".join(r[0] for r in rows))
+
+
+def page_panel(out, scene, idx, gt, imgs, methods, names):
+    """Two rows for a web page: full frames on top, the zoomed crop of each below at full panel size."""
+    size = max(48, min(gt.shape[:2]) // 4)
+    y, x = worst_crop(imgs["adam"], gt, size)
+    cols = [("Ground truth", gt)] + [(names[m], imgs[m]) for m in methods if m in imgs]
+    diff = np.abs(imgs["adam"].astype(np.float32) - imgs["hybrid"].astype(np.float32)).mean(-1)
+    n = len(cols) + 1
+    h, w = gt.shape[:2]
+    fig, axes = plt.subplots(2, n, figsize=(2.2 * n, 2.2 * h / w + 2.2 + 0.4), layout="constrained",
+                             gridspec_kw={"height_ratios": [h / w, 1]})
+    for ax in axes.flat:
+        off(ax)
+    vmax = max(8.0, float(np.percentile(diff, 99.9)))
+    for j, (t, img) in enumerate(cols):
+        axes[0, j].imshow(img)
+        axes[0, j].add_patch(plt.Rectangle((x, y), size, size, fill=False, ec=CROP_COLOR, lw=1.0))
+        axes[0, j].set_title(t if j == 0 else f"{t} · {psnr(img, gt):.2f} dB", fontsize=8)
+        axes[1, j].imshow(img[y:y + size, x:x + size], interpolation="lanczos")
+    axes[0, -1].imshow(diff, cmap="magma", vmin=0, vmax=vmax)
+    axes[0, -1].set_title("|Adam − ours|, 0–255", fontsize=8)
+    axes[1, -1].imshow(diff[y:y + size, x:x + size], cmap="magma", vmin=0, vmax=vmax, interpolation="nearest")
+    axes[1, 0].set_ylabel("zoom (red box)", fontsize=7)
+    axes[1, 0].yaxis.set_visible(True)
+    fig.savefig(os.path.join(out, f"ia_renders_3d_{scene}_page.png"), dpi=150)
+    plt.close(fig)
 
 
 def main():
