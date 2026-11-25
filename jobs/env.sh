@@ -7,9 +7,16 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 [ -f jobs/local.env ] && source jobs/local.env
-if [ "${CONDA_DEFAULT_ENV:-}" != "${IA3DGS_ENV:-ia3dgs}" ] && command -v conda >/dev/null; then
-  source "$(conda info --base)/etc/profile.d/conda.sh"
-  conda activate "${IA3DGS_ENV:-ia3dgs}"
+if [ "${CONDA_DEFAULT_ENV:-}" != "${IA3DGS_ENV:-ia3dgs}" ]; then
+  # conda is often not on PATH in non-interactive shells (ssh, job queues): also try the usual install folders
+  for base in "$(conda info --base 2>/dev/null)" "${CONDA_EXE:+$(dirname "$(dirname "$CONDA_EXE")")}" \
+              "$HOME/miniconda3" "$HOME/anaconda3" "$HOME/miniforge3" "/opt/conda"; do
+    if [ -n "$base" ] && [ -f "$base/etc/profile.d/conda.sh" ]; then
+      source "$base/etc/profile.d/conda.sh"
+      conda activate "${IA3DGS_ENV:-ia3dgs}"
+      break
+    fi
+  done
 fi
 export PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 export TORCH_HOME="$(python -c 'from ia3dgs import paths; print(paths.cache())')/torch"
