@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+.DS_Store
+# datasets, caches and new run outputs (results/ holds the logs behind the report and is tracked)
+data/
+runs/
+*.pt
+*.zip
+jobs/local.env

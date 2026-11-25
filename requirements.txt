@@ -1,0 +1,13 @@
+# Python 3.10, CUDA 12.1
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch==2.4.1+cu121
+torchvision==0.19.1+cu121
+# prebuilt gsplat wheel: pip install --no-deps "gsplat==1.4.0+pt24cu121" --index-url https://docs.gsplat.studio/whl/pt24cu121
+gsplat==1.4.0
+jaxtyping==0.3.7
+numpy==1.26.4
+imageio==2.35.1
+matplotlib==3.9.2
+scipy==1.14.1
+torchmetrics==1.4.2
+pytest==9.2.0

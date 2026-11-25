@@ -1,0 +1,40 @@
+{
+ "cfg": {
+  "out": "runs/tierA/E1/hybrid_s0",
+  "solver": "hybrid",
+  "lr": 0.1,
+  "image": "kodim23",
+  "size": 256,
+  "n": 2000,
+  "mode": "reparam",
+  "seed": 0,
+  "iters": 1000000,
+  "lm_iters": 1000000,
+  "time_budget": 600.0,
+  "lam0": 0.01,
+  "cg_iters": 10,
+  "probes": 4,
+  "hybrid_window": 100,
+  "hybrid_tol": 0.002,
+  "hybrid_max_adam": 3000,
+  "mu0": 0.01,
+  "mu1": 1e-05,
+  "log_every": 10
+ },
+ "host": "rtx3090",
+ "gpu": "NVIDIA GeForce RTX 3090",
+ "final_loss": 0.01591847836971283,
+ "final_psnr": 32.604087854720625,
+ "init_loss": 0.37186259031295776,
+ "iters": 2380,
+ "passes": 6880,
+ "time": 603.2300857882947,
+ "peak_mem_mb": 662.3896484375,
+ "diverged": false,
+ "infeasible": 0,
+ "phase_switch": {
+  "it": 2340,
+  "t": 430.4683859478682,
+  "passes": 4680
+ }
+}
