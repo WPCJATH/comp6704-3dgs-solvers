@@ -33,6 +33,7 @@ FIRST_ORDER = ["sgd", "momentum", "rmsprop", "adam"]
 
 @dataclass
 class Cfg:
+    """Settings of one Tier A run (one solver, one seed); every field is also a command-line flag."""
     out: str = ""
     solver: str = "adam"
     lr: float = 1e-2
@@ -57,6 +58,7 @@ class Cfg:
 
 
 def make_opt(solver, params, lr):
+    """Return the torch.optim optimizer for a first-order solver name (sgd, momentum, rmsprop, adam)."""
     if solver == "sgd":
         return torch.optim.SGD(params, lr=lr)
     if solver == "momentum":
@@ -92,6 +94,11 @@ class Logger:
 
 
 def run(cfg: Cfg):
+    """Fit the Kodak image with one solver until the time budget runs out.
+
+    Writes log.jsonl (the curve) and summary.json (final loss, PSNR, passes, time, peak memory) to cfg.out
+    and returns the summary dict.
+    """
     torch.manual_seed(cfg.seed)
     dev = "cuda"
     gt = load_image(os.path.join(paths.datasets(), "kodak", cfg.image + ".png"), cfg.size, dev)

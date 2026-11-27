@@ -4,7 +4,7 @@ __pycache__/
 .DS_Store
 # datasets, caches and new run outputs (results/ holds the logs behind the report and is tracked)
 data/
-runs/
+/runs/
 *.pt
 *.zip
 jobs/local.env

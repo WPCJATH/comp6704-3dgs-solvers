@@ -129,6 +129,8 @@ def _qvec2rot(q):
 
 
 def load_colmap(root, factor=4, device="cuda", llffhold=8):
+    """Load a Mip-NeRF 360 scene from its COLMAP model, with images downsampled by `factor`;
+    every `llffhold`-th view is a test view (the standard split)."""
     sp = os.path.join(root, "sparse", "0")
     cams = read_cameras(os.path.join(sp, "cameras.bin"))
     ims = sorted(read_images(os.path.join(sp, "images.bin")).values(), key=lambda t: t[0])
@@ -171,6 +173,7 @@ SCENES = {
 
 
 def load_scene(datasets_root, name, device="cuda"):
+    """Load a scene by name (lego, chair, ficus, garden, bicycle) from the datasets folder."""
     sub, kind = SCENES[name]
     root = os.path.join(datasets_root, sub, name)
     return load_blender(root, device=device) if kind == "blender" else load_colmap(root, device=device)

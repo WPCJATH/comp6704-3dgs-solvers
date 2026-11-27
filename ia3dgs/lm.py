@@ -32,10 +32,12 @@ class LeastSquares:
 
     @torch.no_grad()
     def F(self, xs):
+        """Residual vector F(x) (one render pass)."""
         self.passes += 1
         return self.res_fn(xs)
 
     def JT(self, xs, u):
+        """J^T u by reverse-mode AD (one forward and one backward pass)."""
         xs_ = [x.detach().requires_grad_(True) for x in xs]
         with torch.enable_grad():
             r = self.res_fn(xs_)
@@ -44,6 +46,7 @@ class LeastSquares:
         return [torch.zeros_like(x) if gi is None else gi for x, gi in zip(xs, g)]
 
     def residual_and_grad(self, xs):
+        """Residuals F(x) and the gradient J^T F(x) in one forward and one backward pass."""
         xs_ = [x.detach().requires_grad_(True) for x in xs]
         with torch.enable_grad():
             r = self.res_fn(xs_)
@@ -52,6 +55,7 @@ class LeastSquares:
         return r.detach(), [torch.zeros_like(x) if gi is None else gi for x, gi in zip(xs, g)]
 
     def J(self, xs, v):
+        """J v by forward-mode AD if exact_jvp, else by a central finite difference (two passes either way)."""
         if self.exact_jvp:
             self.passes += 2
             xs_ = tuple(x.detach() for x in xs)
@@ -70,12 +74,14 @@ class LeastSquares:
         return (rp - rm) / (2 * h)
 
     def JTJ(self, xs, v):
+        """Gauss-Newton product J^T J v without forming J (four passes)."""
         jv = self.J(xs, v)
         if jv is None:
             return [torch.zeros_like(t) for t in v]
         return self.JT(xs, jv)
 
     def diag_JTJ(self, xs, probes, m, dtype=None):
+        """Hutchinson estimate of diag(J^T J): mean of (J^T z)^2 over `probes` Rademacher vectors z of length m."""
         acc = [torch.zeros_like(x) for x in xs]
         for _ in range(probes):
             z = torch.empty(m, device=xs[0].device, dtype=dtype or xs[0].dtype).bernoulli_(0.5).mul_(2).sub_(1)
@@ -172,6 +178,10 @@ class LM:
         self.history = []
 
     def step(self, xs):
+        """One LM step: PCG solve of the damped normal equations, gain-ratio test, damping update.
+
+        Returns the (possibly unchanged) parameters and whether the step was accepted.
+        """
         t0 = time.time()
         r0, g = self.ls.residual_and_grad(xs)
         E0 = 0.5 * float(r0 @ r0)

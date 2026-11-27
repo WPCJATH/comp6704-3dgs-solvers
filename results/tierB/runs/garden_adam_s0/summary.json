@@ -1,0 +1,41 @@
+{
+ "scene": "garden",
+ "method": "adam",
+ "seed": 0,
+ "args": {
+  "scene": "garden",
+  "method": "adam",
+  "seed": 0,
+  "steps": 30000,
+  "switch": 20000,
+  "lr_mult": 1.0,
+  "tag": "",
+  "base_tag": "",
+  "lm_views": 0,
+  "lm_chunk": 10,
+  "lm_cg": 8,
+  "lm_probes": 2,
+  "lm_lam0": 0.01,
+  "lm_precond": "group",
+  "lm_fd_h": 0.001,
+  "lm_groups": "all",
+  "lm_fp32": false,
+  "time_budget": 0.0,
+  "eval_every": 1000
+ },
+ "host": "a6000",
+ "gpu": "NVIDIA RTX A6000",
+ "n_train": 161,
+ "n_test": 24,
+ "H": 840,
+ "W": 1297,
+ "t_at_switch": 1456.2676019725623,
+ "time_train": 2344.7366442780476,
+ "n_gaussians": 5953959,
+ "peak_mem_mb": 9534.21240234375,
+ "test": {
+  "psnr": 27.359303458305163,
+  "ssim": 0.8666085700194041,
+  "lpips": 0.0762411025352776
+ }
+}

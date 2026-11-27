@@ -1,0 +1,39 @@
+{
+ "scene": "garden",
+ "method": "rmsprop",
+ "seed": 0,
+ "args": {
+  "scene": "garden",
+  "method": "rmsprop",
+  "seed": 0,
+  "steps": 30000,
+  "switch": 20000,
+  "lr_mult": 1.0,
+  "tag": "",
+  "base_tag": "",
+  "lm_views": 0,
+  "lm_chunk": 10,
+  "lm_cg": 8,
+  "lm_probes": 2,
+  "lm_lam0": 0.01,
+  "lm_fd_h": 0.001,
+  "lm_groups": "all",
+  "lm_fp32": false,
+  "time_budget": 0.0,
+  "eval_every": 1000
+ },
+ "host": "a6000",
+ "gpu": "NVIDIA RTX A6000",
+ "n_train": 161,
+ "n_test": 24,
+ "H": 840,
+ "W": 1297,
+ "time_train": 1215.3301734179258,
+ "n_gaussians": 2602313,
+ "peak_mem_mb": 4927.79248046875,
+ "test": {
+  "psnr": 27.201476878627556,
+  "ssim": 0.8592698747913042,
+  "lpips": 0.08928452680508296
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "scene": "lego",
+ "method": "hybrid",
+ "seed": 0,
+ "args": {
+  "scene": "lego",
+  "method": "hybrid",
+  "seed": 0,
+  "steps": 30000,
+  "switch": 20000,
+  "lr_mult": 1.0,
+  "tag": "_pilot_all",
+  "base_tag": "",
+  "lm_views": 4,
+  "lm_cg": 8,
+  "lm_probes": 2,
+  "lm_lam0": 0.01,
+  "lm_fd_h": 0.001,
+  "lm_groups": "all",
+  "lm_fp32": false,
+  "time_budget": 300.0,
+  "eval_every": 1000
+ },
+ "host": "a6000",
+ "gpu": "NVIDIA RTX A6000",
+ "n_train": 100,
+ "n_test": 200,
+ "H": 400,
+ "W": 400,
+ "lm_time_budget": 300.0,
+ "lm_iters": 498,
+ "lm_accepted": 296,
+ "lm_passes": 18818,
+ "lm_time": 300.65271183638833,
+ "time_train": 514.8179513686337,
+ "n_gaussians": 263615,
+ "peak_mem_mb": 2854.64453125,
+ "test": {
+  "psnr": 29.458178271056372,
+  "ssim": 0.9524415430426597,
+  "lpips": 0.0506239146925509
+ }
+}

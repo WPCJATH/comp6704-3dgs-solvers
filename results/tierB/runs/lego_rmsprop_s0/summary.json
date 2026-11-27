@@ -1,0 +1,39 @@
+{
+ "scene": "lego",
+ "method": "rmsprop",
+ "seed": 0,
+ "args": {
+  "scene": "lego",
+  "method": "rmsprop",
+  "seed": 0,
+  "steps": 30000,
+  "switch": 20000,
+  "lr_mult": 1.0,
+  "tag": "",
+  "base_tag": "",
+  "lm_views": 0,
+  "lm_chunk": 10,
+  "lm_cg": 8,
+  "lm_probes": 2,
+  "lm_lam0": 0.01,
+  "lm_fd_h": 0.001,
+  "lm_groups": "all",
+  "lm_fp32": false,
+  "time_budget": 0.0,
+  "eval_every": 1000
+ },
+ "host": "a6000",
+ "gpu": "NVIDIA RTX A6000",
+ "n_train": 100,
+ "n_test": 200,
+ "H": 400,
+ "W": 400,
+ "time_train": 246.6824668297777,
+ "n_gaussians": 110980,
+ "peak_mem_mb": 3275.78955078125,
+ "test": {
+  "psnr": 35.24768380883647,
+  "ssim": 0.9863729938864708,
+  "lpips": 0.00890128497441765
+ }
+}

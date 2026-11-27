@@ -39,12 +39,50 @@ finite-difference `Jv` does not match gsplat's backward pass for positions, scal
 | Tier A, PSNR (dB) after 600 s, 3 seeds | 32.77 ± 0.14 | 32.72 ± 0.12 | RMSProp 31.57, Nesterov 30.54, SGD 29.08, L-BFGS 28.77, LM 26.86 |
 | lego / chair / ficus, test PSNR (dB) | 35.56 / 37.16 / 33.17 | 35.34 / 37.02 / 33.08 | RMSProp 35.25 / 37.13 / 32.90 |
 | garden / bicycle, test PSNR (dB) | 27.36 / 25.17 | 27.37 / 25.17 | RMSProp 27.20 / 25.11 |
-| peak GPU memory, real scenes | 9.5 GB | 53 GB | |
+| peak GPU memory, garden / bicycle (GiB) | 9.3 / 9.5 | 52.0 / 51.4 | |
 
 Adam's second-moment estimate rank-correlates 0.85–0.92 with the Gauss–Newton diagonal `diag(JᵀJ)` near
 convergence (E3), so Adam behaves like a cheap diagonal preconditioner. The hybrid's LM steps are accurate:
 every step was accepted on every 3D scene. Each step, however, costs tens of render passes, so the hybrid ties
 Adam rather than beating it. Every number in the report is in `results/figures/results.json`.
+
+## Rendered results
+
+The report has room for only one image figure, so the full comparison is here. Each panel shows one test view
+per scene: the full frame (top) and an enlarged crop of the red box (bottom), for the ground truth, Adam,
+the Adam → LM hybrid and RMSProp, with the test PSNR of that view. The last column is the per-pixel
+difference between Adam and the hybrid (0–255).
+
+**lego** (NeRF-Synthetic)
+![lego: ground truth, Adam, Adam → LM, RMSProp and the Adam–hybrid difference](results/figures/ia_renders_3d_lego_page.png)
+
+**chair** (NeRF-Synthetic)
+![chair: ground truth, Adam, Adam → LM, RMSProp and the Adam–hybrid difference](results/figures/ia_renders_3d_chair_page.png)
+
+**ficus** (NeRF-Synthetic)
+![ficus: ground truth, Adam, Adam → LM, RMSProp and the Adam–hybrid difference](results/figures/ia_renders_3d_ficus_page.png)
+
+**garden** (Mip-NeRF 360)
+![garden: ground truth, Adam, Adam → LM, RMSProp and the Adam–hybrid difference](results/figures/ia_renders_3d_garden_page.png)
+
+**bicycle** (Mip-NeRF 360)
+![bicycle: ground truth, Adam, Adam → LM, RMSProp and the Adam–hybrid difference](results/figures/ia_renders_3d_bicycle_page.png)
+
+**Tier A** (2D image fit after 600 s, every solver)
+![Final image of each solver on the Tier A image fit after 600 s](results/figures/ia_renders_2d.png)
+
+## Which script makes which report figure
+
+| Report figure / table | File in `results/figures` | Script |
+|---|---|---|
+| Figure 1 (teaser) | `ia_fig1_teaser.{png,pdf}` | `make_teaser.py` |
+| Figure 3 (convergence), Table 1 | `ia_e1_convergence.*`, `results.json` → `E1` | `make_figures.py` |
+| Figure 4 (curvature) | `ia_e3_curvature.*` | `make_figures.py` |
+| Figure 5 (step size, cost, constraints) | `ia_e245_combined.{png,pdf}` | `make_fig_e245.py` |
+| Table 2 (3D scenes) | `results.json` → `E6` | `make_figures.py` |
+| Figure 6 (rendered results) | crops of `ia_renders_2d.png`, `ia_renders_3d_lego.png` and `ia_renders_3d_garden.png` | `make_render_figures.py` (the panels) |
+
+Figure 2 (the formulation diagram) is a schematic and is not generated from the logs.
 
 ## Installation
 
@@ -66,6 +104,8 @@ This command rebuilds every plot and every table value from those logs:
 
 ```bash
 python make_figures.py --runs results --out results/figures     # CPU only; needs only numpy and matplotlib
+python make_fig_e245.py --runs results --out results/figures    # Figure 5: E2, E4 and E5 in one figure
+python make_teaser.py                                           # Figure 1: teaser
 ```
 
 The Tier A image figure (`results/figures/ia_renders_2d.png`) can also be rebuilt from the shipped
@@ -75,8 +115,6 @@ and PyTorch for the image loader. The Tier B image figure needs your own Tier B 
 ```bash
 python make_render_figures.py --runs results --out results/figures
 ```
-
-![Final image of each solver on the Tier A image fit after 600 s](results/figures/ia_renders_2d.png)
 
 ## Data
 
@@ -112,10 +150,10 @@ excluded. `bash jobs/env.sh <cmd>` runs a command inside the `ia3dgs` environmen
 | 1 | Tier A: step-size pilot → E2 → E1 (9 variants × 3 seeds × 600 s), E5, E4 → E3 | `bash jobs/env.sh bash jobs/tierA_all.sh` | ~6 h (RTX 3090) |
 | 2 | Tier B stage 1: lego Adam baseline, FD adjoint check, two LM pilots with 4 views per step | `bash jobs/env.sh bash jobs/tierB_stage1.sh` | ~20 min |
 | 3 | Full-batch LM pilots (every attribute / colour / colour + opacity) | `bash jobs/env.sh bash jobs/tierB_pilots_fullbatch.sh` | ~20 min |
-| 4 | E6: per scene, the Adam baseline (checkpoint at step 20k), then the hybrid from it with Adam's 20k → 30k time | `bash jobs/env.sh bash jobs/tierB_hybrids.sh` | ~2.5 h (RTX A6000) |
-| 5 | E6: RMSProp on every scene | `bash jobs/env.sh bash jobs/tierB_baselines.sh` | ~55 min |
+| 4 | E6: per scene, the Adam baseline (checkpoint at step 20k), then the hybrid from it with Adam's 20k → 30k time | `bash jobs/env.sh bash jobs/tierB_hybrids.sh` | ~3.5 h (RTX A6000) |
+| 5 | E6: RMSProp on every scene | `bash jobs/env.sh bash jobs/tierB_baselines.sh` | ~80 min |
 | 6 | Seed 0 of E1 again, saving the rendered images (for the qualitative figure) | `bash jobs/env.sh python tierA/grid.py --exp renders` | ~75 min |
-| 7 | All plots and `results.json` | `python make_figures.py` | CPU |
+| 7 | All plots and `results.json`, then Figure 5 and the teaser | `python make_figures.py && python make_fig_e245.py && python make_teaser.py` | CPU |
 | 8 | Rendered-image figures (needs the datasets for the ground truth) | `python make_render_figures.py` | CPU |
 
 Single runs:
@@ -154,7 +192,10 @@ jobs/            one script per experiment stage (table above); env.sh activates
 tests/           unit tests (pytest) and smoke tests
 tools/           download_data.sh
 results/         logs of every run in the report, and the figures built from them
-make_figures.py, make_render_figures.py
+make_figures.py         every plot and results.json from the logs
+make_fig_e245.py        Figure 5 of the report (E2, E4, E5 in one figure)
+make_teaser.py          Figure 1 of the report
+make_render_figures.py  rendered-image figures (needs the datasets for the ground truth)
 ```
 
 ## Third-party code and licences

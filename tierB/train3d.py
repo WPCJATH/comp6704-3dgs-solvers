@@ -52,6 +52,7 @@ def knn_dist(x, k=3, chunk=4096):
 
 
 def init_params(scene, seed, device="cuda"):
+    """Initial Gaussians from the scene's point cloud, in the stored (pre-activation) parameterisation."""
     torch.manual_seed(seed)
     xyz, rgb = scene.init_xyz, scene.init_rgb
     n = xyz.shape[0]
@@ -86,6 +87,10 @@ def make_optimizers(params, method, scene_scale, lr_mult=1.0):
 
 
 def render(p, viewmats, Ks, W, H, sh_degree, bg, need_info=False):
+    """Rasterise the Gaussians with gsplat; scales and opacities are activated here (exp, sigmoid).
+
+    Returns the images (clamped to [0, 1] unless need_info) and gsplat's info dict for densification.
+    """
     colors = torch.cat([p["sh0"], p["shN"]], 1)
     img, _, info = rasterization(p["means"], p["quats"], torch.exp(p["scales"]), torch.sigmoid(p["opacities"]),
                                  colors, viewmats, Ks, W, H, sh_degree=sh_degree, packed=False,
@@ -134,6 +139,7 @@ def ckpt_path(scene, seed, tag=""):
 
 
 def main():
+    """Train one scene with Adam, RMSProp or the Adam -> LM hybrid and write log.jsonl and summary.json."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--scene", required=True)
     ap.add_argument("--method", choices=["adam", "rmsprop", "hybrid"], required=True)

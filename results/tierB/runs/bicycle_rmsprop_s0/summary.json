@@ -1,0 +1,40 @@
+{
+ "scene": "bicycle",
+ "method": "rmsprop",
+ "seed": 0,
+ "args": {
+  "scene": "bicycle",
+  "method": "rmsprop",
+  "seed": 0,
+  "steps": 30000,
+  "switch": 20000,
+  "lr_mult": 1.0,
+  "tag": "",
+  "base_tag": "",
+  "lm_views": 0,
+  "lm_chunk": 10,
+  "lm_cg": 8,
+  "lm_probes": 2,
+  "lm_lam0": 0.01,
+  "lm_precond": "group",
+  "lm_fd_h": 0.001,
+  "lm_groups": "all",
+  "lm_fp32": false,
+  "time_budget": 0.0,
+  "eval_every": 1000
+ },
+ "host": "a6000",
+ "gpu": "NVIDIA RTX A6000",
+ "n_train": 169,
+ "n_test": 25,
+ "H": 822,
+ "W": 1237,
+ "time_train": 1607.3948592123343,
+ "n_gaussians": 3260733,
+ "peak_mem_mb": 4784.609375,
+ "test": {
+  "psnr": 25.106582048631036,
+  "ssim": 0.751651668548584,
+  "lpips": 0.21016021847724914
+ }
+}

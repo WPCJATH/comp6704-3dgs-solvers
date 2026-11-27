@@ -1,0 +1,40 @@
+{
+ "scene": "chair",
+ "method": "rmsprop",
+ "seed": 0,
+ "args": {
+  "scene": "chair",
+  "method": "rmsprop",
+  "seed": 0,
+  "steps": 30000,
+  "switch": 20000,
+  "lr_mult": 1.0,
+  "tag": "",
+  "base_tag": "",
+  "lm_views": 0,
+  "lm_chunk": 10,
+  "lm_cg": 8,
+  "lm_probes": 2,
+  "lm_lam0": 0.01,
+  "lm_precond": "group",
+  "lm_fd_h": 0.001,
+  "lm_groups": "all",
+  "lm_fp32": false,
+  "time_budget": 0.0,
+  "eval_every": 1000
+ },
+ "host": "a6000",
+ "gpu": "NVIDIA RTX A6000",
+ "n_train": 100,
+ "n_test": 200,
+ "H": 400,
+ "W": 400,
+ "time_train": 790.094230673858,
+ "n_gaussians": 95727,
+ "peak_mem_mb": 3275.78955078125,
+ "test": {
+  "psnr": 37.1312375768783,
+  "ssim": 0.9908458960056304,
+  "lpips": 0.005533753961790353
+ }
+}

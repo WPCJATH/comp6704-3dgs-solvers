@@ -1,0 +1,41 @@
+{
+ "scene": "lego",
+ "method": "adam",
+ "seed": 0,
+ "args": {
+  "scene": "lego",
+  "method": "adam",
+  "seed": 0,
+  "steps": 30000,
+  "switch": 20000,
+  "lr_mult": 1.0,
+  "tag": "",
+  "base_tag": "",
+  "lm_views": 0,
+  "lm_chunk": 10,
+  "lm_cg": 8,
+  "lm_probes": 2,
+  "lm_lam0": 0.01,
+  "lm_precond": "group",
+  "lm_fd_h": 0.001,
+  "lm_groups": "all",
+  "lm_fp32": false,
+  "time_budget": 0.0,
+  "eval_every": 1000
+ },
+ "host": "a6000",
+ "gpu": "NVIDIA RTX A6000",
+ "n_train": 100,
+ "n_test": 200,
+ "H": 400,
+ "W": 400,
+ "t_at_switch": 201.57471356948372,
+ "time_train": 309.3810120308772,
+ "n_gaussians": 265230,
+ "peak_mem_mb": 3275.78955078125,
+ "test": {
+  "psnr": 35.56187009259738,
+  "ssim": 0.9872801765799523,
+  "lpips": 0.007884213190409354
+ }
+}
